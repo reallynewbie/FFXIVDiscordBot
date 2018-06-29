@@ -1,8 +1,8 @@
 module.exports = class Character {
   constructor(accountID) {
     this._accountID = accountID;
-    this.level = 1;
-    this.job = new Array();
+    this._level = 1;
+    this._job = new Array();
     this.xp = 0;
     this.hp = 1;
     this.skillList = new Array();
@@ -12,20 +12,30 @@ module.exports = class Character {
   get accountID() {
     return this._accountID;
   }
+  get level() {
+    return this._level;
+  }
+  get job() {
+    return this._job;
+  }
 
-  //Setters
+  //ES6 Setters
   set accountID(newID) {
     this._accountID = newID;
     //Need validation
   }
 
-  setLevel(newLevel) {
+  set level(newLevel) {
     if (isNaN(newLevel) == true) {
-      this.level = newLevel;
+      this._level = newLevel;
     } else {
       throw "NewLevel: " + newLevel + " is not a number";
     }
   }
+
+
+
+
   increaseLevel() {
     this.level += 1;
   }
