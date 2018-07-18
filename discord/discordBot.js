@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
-const directMessage = require("./discordDM");
-const serverMessage = require("./discordServerText");
+const directMessage = require("./discordDM.js");
+//const serverMessage = require("./discordServerText.js");
 
 const client = new Discord.Client();
 
@@ -16,10 +16,11 @@ function discordLogin() {
     switch (messageType) {
       case "dm":
         console.log("Enter DM");
-        directMessage.handle
+        directMessage(client, message);
         break;
       case "text":
         console.log("Enter server text");
+        //serverMessage(client, message);
         break;
       default:
         console.log("messageType = " + messageType);

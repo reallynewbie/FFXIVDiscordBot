@@ -8,7 +8,9 @@ let charSchema = new Schema({
     HP: Number,
     MP: Number,
     AccountID: String,
-    dateJoined: Date 
+    dateJoined: Date,
+    CharFName: String,
+    CharLName: String
 });
 
 var Character = mongoose.model("Character", charSchema);
