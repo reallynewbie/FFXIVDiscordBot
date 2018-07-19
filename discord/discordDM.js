@@ -8,14 +8,17 @@ module.exports = function(client, inmsg) {
 
   switch (command) {
     case "help":
+      inmsg.channel.send("You called for help?");
       break;
     case "update":
     case "updatefflogs":
+      inmsg.channel.send("You called for update?");
       break;
     case "char":
     case "mychar":
     case "stats":
-    break;
+      inmsg.channel.send("You called for char?");
+      break;
 
     default:
   }

@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -36,18 +38,18 @@ db.once("open", function() {
       console.log("Save completed");
     });
   });
-  promise.then(function() {
-    promise = Account.find(function(err, accounts) {
-      if (err) return console.error(err);
-      console.log("Accounts found: ", accounts);
+  promise
+    .then(function() {
+      promise = Account.find(function(err, accounts) {
+        if (err) return console.error(err);
+        console.log("Accounts found: ", accounts);
+      });
+    })
+    .then(function() {
+      Account.remove({}, function(err) {
+        console.log("collection removed");
+      });
     });
-  }).then(function() {
-    Account.remove({}, function(err) {
-      console.log("collection removed");
-    });
-  });
-
-  
 });
 
 console.log("completed");
