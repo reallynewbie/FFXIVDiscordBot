@@ -5,7 +5,11 @@ const directMessage = require("./discordDM.js");
 const client = new Discord.Client();
 
 require("dotenv").config();
-discordLogin();
+try {
+  discordLogin();
+} catch (err) {
+  console.log("Error from discordLogin: ", err);
+}
 
 function discordLogin() {
   client.on("ready", () => {
@@ -13,18 +17,21 @@ function discordLogin() {
   });
   client.on("message", message => {
     let messageType = message.channel.type;
-    switch (messageType) {
-      case "dm":
-        console.log("Enter DM");
-        directMessage(client, message);
-        break;
-      case "text":
-        console.log("Enter server text");
-        //serverMessage(client, message);
-        break;
-      default:
-        console.log("messageType = " + messageType);
+    if (message.author.username != process.env.BOT_NAME) {
+      switch (messageType) {
+        case "dm":
+          console.log("Enter DM");
+          directMessage(client, message);
+          break;
+        case "text":
+          console.log("Enter server text");
+          //serverMessage(client, message);
+          break;
+        default:
+          console.log("messageType = " + messageType);
+      }
     }
+    
 
     // if (message.content.startsWith("server")) {
     //   discordGetServer(client);
@@ -38,6 +45,9 @@ function discordLogin() {
   });
   client.login(process.env.DISCORD_KEY);
 }
+
+
+
 function discordGetChannels(myClient) {
   console.log(myClient.channels.findAll("name", "test"));
 }
