@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
-const directMessage = require("./discordDM.js");
-//const serverMessage = require("./discordServerText.js");
+const directMessage = require("./discord/discordDM");
+//const serverMessage = require("./discord/discordServerText");
 
 const client = new Discord.Client();
 
@@ -31,7 +31,6 @@ function discordLogin() {
           console.log("messageType = " + messageType);
       }
     }
-    
 
     // if (message.content.startsWith("server")) {
     //   discordGetServer(client);
@@ -52,8 +51,6 @@ function discordLogin() {
 
   client.login(process.env.DISCORD_KEY);
 }
-
-
 
 function discordGetChannels(myClient) {
   console.log(myClient.channels.findAll("name", "test"));
