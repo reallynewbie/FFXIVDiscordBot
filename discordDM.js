@@ -1,3 +1,9 @@
+const helpString = `__**Available Commands:**__ 
+help - *Displays this message with available commands*
+updatefflogs - *Links your account with a new FFLogs Account*
+char/me/stats - *Displays your current stats*`;
+
+
 module.exports = function(client, inmsg) {
   let args = parseMessage(inmsg);
   let command = args.shift().toLowerCase();
@@ -8,11 +14,11 @@ module.exports = function(client, inmsg) {
 
   switch (command) {
     case "help":
-      inmsg.channel.send("You called for help?");
+      inmsg.channel.send(helpString);
       break;
     case "update":
     case "updatefflogs":
-      inmsg.channel.send("You called for update?");
+      updateFFLogs(inmsg);
       break;
     case "char":
     case "mychar":
@@ -23,6 +29,10 @@ module.exports = function(client, inmsg) {
     default:
   }
 };
+
+function updateFFLogs(message) {
+  
+}
 
 function parseMessage(msg) {
   return msg.content.trim().split(/ +/g);
@@ -36,6 +46,8 @@ function parseMessage(msg) {
 
     char/mychar/stats
     menu
+    deleteaccount(ask for confirmation)
+
 
     --To be done--
     use

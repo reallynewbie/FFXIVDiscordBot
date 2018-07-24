@@ -13,6 +13,8 @@ let charSchema = new Schema({
     CharLName: String
 });
 
+charSchema.virtual('fullName').get()
+
 var Character = mongoose.model("Character", charSchema);
 
 module.exports = Character;

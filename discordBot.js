@@ -17,7 +17,7 @@ function discordLogin() {
   });
   client.on("message", message => {
     let messageType = message.channel.type;
-    if (message.author.username != process.env.BOT_NAME) {
+    if (!message.author.bot) {
       switch (messageType) {
         case "dm":
           console.log("Enter DM");
@@ -43,6 +43,13 @@ function discordLogin() {
     //   console.log(message.author + "Channel:  " + message.channel.type);
     // }
   });
+  client.on("guildCreate", guild => {
+    //On joining a guild
+  });
+  client.on("guildDelete", guild => {
+    //on being kicked from a guild (Delete all maybe?)
+  });
+
   client.login(process.env.DISCORD_KEY);
 }
 
