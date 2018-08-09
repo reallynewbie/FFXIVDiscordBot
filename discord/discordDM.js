@@ -3,6 +3,7 @@ help - *Displays this message with available commands*
 updatefflogs - *Links your account with a new FFLogs Account*
 char/me/stats - *Displays your current stats*`;
 
+let db = require("../mongoosedb.js");
 
 module.exports = function(client, inmsg) {
   let args = parseMessage(inmsg);
@@ -25,14 +26,19 @@ module.exports = function(client, inmsg) {
     case "stats":
       inmsg.channel.send("You called for char?");
       break;
-
+    case "testadd":
+      db.addAccount({
+        discordName: "Test1",
+        discordAcctID: "abc",
+        accountID: 1
+      });
+      console.log("TestAdd Run");
+      break;
     default:
   }
 };
 
-function updateFFLogs(message) {
-  
-}
+function updateFFLogs(message) {}
 
 function parseMessage(msg) {
   return msg.content.trim().split(/ +/g);
