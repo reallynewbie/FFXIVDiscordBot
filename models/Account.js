@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
+const WoL = require("./Character");
 // Define schema
 var Schema = mongoose.Schema;
 
 var accountSchema = new Schema({
-    username: String,
-    password: String,
     discordName: String,
+    discordAcctID: String,
     accountID: Number,
-    updateffLogsTrigger: Boolean
+    character: WoL,
+    updateffLogsTrigger: {type: Boolean, default: false}
 });
 
 
