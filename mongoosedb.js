@@ -30,42 +30,47 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 //   updateffLogsTrigger: {type: Boolean, default: false}
 // });
 
-function addAccount(acctInfo) {
+async function addAccount(acctInfo) {
+  console.log("Start addAccount:  ", acctInfo);
+
   //Check if account exists
   try {
     let discordID = acctInfo.discordAcctID;
-    let result = await findAccount(discordID);
-    if (result) {
-      console.log("Result = ", result);
-    }
-    else {
-      newAccount = new Accounts(acctInfo);
-      newAccount.save(function(err, res) {
-              if (err) return console.error(err);
-              console.log("Save completed");
-            });
-    }
+    findAccount(discordID, function(err, result) {
+      if (result.length != 0) {
+        console.log("Result = ", result);
+      } else {
+        newAccount = new Accounts(acctInfo);
+        newAccount.save(function(err, res) {
+          if (err) return console.error(err);
+          console.log("Save completed");
+        });
+      }
+    });    
   } catch (err) {
     if (err.name == "ReferenceError") {
-      console.log("discordAcctID doesn't exist");
-    }
+      console.log("discordAcctID doesn't exist", err);
+    } else console.log(err);
   }
 }
 
-function findAccount(acctID) {
-  Accounts.find({ discordAcctID: discordID }, "discordName", function(
+function findAccount(acctID, callback) {
+  Accounts.find({ discordAcctID: "acctID" }, "discordName", function(
     err,
     account
   ) {
     if (err) return console.log(err);
-    console.log("Account found");
-    return account;
+    callback(null, account);
   });
 }
 
-function deleteAccount()
+function deleteAccount(acctID) {}
 
-module.exports = {};
+module.exports = {
+  addAccount,
+  findAccount,
+  deleteAccount
+};
 
 // db.once("open", function() {
 //   var testAccount = new Account({

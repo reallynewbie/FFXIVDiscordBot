@@ -1,13 +1,12 @@
 const mongoose = require("mongoose");
-const WoL = require("./Character");
+//const WoL = require("./Character");
 // Define schema
 var Schema = mongoose.Schema;
-
+//Took out char:character: WoL,
 var accountSchema = new Schema({
     discordName: String,
     discordAcctID: String,
     accountID: Number,
-    character: WoL,
     updateffLogsTrigger: {type: Boolean, default: false}
 });
 
