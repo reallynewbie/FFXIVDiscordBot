@@ -91,8 +91,8 @@ module.exports = {
   findAccount,
   deleteAccount
 };
-addAccount({
-  discordAcctID: "",
-  discordName: ""
-}) ;
+// addAccount({
+//   discordAcctID: "",
+//   discordName: ""
+// }) ;
 console.log("Mongoosedb Completed");
