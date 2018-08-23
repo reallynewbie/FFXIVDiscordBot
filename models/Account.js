@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 var accountSchema = new Schema({
   discordName: String,
   discordAcctID: String,
-  accountID: Number,
+  accountID: "",
   updateffLogsTrigger: { type: Boolean, default: false }
 });
 

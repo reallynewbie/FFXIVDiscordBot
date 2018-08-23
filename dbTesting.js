@@ -23,6 +23,11 @@ var db = mongoose.connection;
 
 autoIncrement.initialize(db);
 
+Accounts.schema.plugin(autoIncrement.plugin, {
+  model: "Accounts",
+  field: "accountID"
+})
+
 //Bind connection to error event (to get notification of connection errors)
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
@@ -33,14 +38,10 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 //   updateffLogsTrigger: {type: Boolean, default: false}
 // });
 
-let acctNum = Accounts.count + 1;
-console.log(acctNum);
-
 function addAccount() {
   acctInfo = {
     discordAcctID: "dbTesting_AcctID",
     discordName: "dbTesting_Name",
-    accountID: acctNum
   };
   //Check if account exists
   try {
@@ -49,7 +50,7 @@ function addAccount() {
       if (result.length != 0) {
         console.log("Result = ", result);
       } else {
-        newAccount = new Accounts(acctInfo);
+        newAccount = new Accounts.model(acctInfo);
         newAccount.save(function (err, res) {
           if (err) return console.error(err);
           console.log("Save completed");
@@ -64,7 +65,7 @@ function addAccount() {
 }
 
 function findAccount(acctID, callback) {
-  Accounts.find({
+  Accounts.model.find({
     discordAcctID: "acctID"
   }, "discordName", function (
     err,
@@ -76,15 +77,15 @@ function findAccount(acctID, callback) {
 }
 
 function clearDB() {
-  Accounts.remove({}, function (err) {
+  Accounts.model.remove({}, function (err) {
     console.log("Accounts removed");
   });
 }
 
 
 function testing() {
-  //addAccount();
-  clearDB();
+  addAccount();
+  //clearDB();
   console.log("dbTesting Completed");
 }
 
