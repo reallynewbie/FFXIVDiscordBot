@@ -66,7 +66,7 @@ function addAccount() {
 
 function findAccount(acctID, callback) {
   Accounts.model.find({
-    discordAcctID: "acctID"
+    discordAcctID: acctID
   }, "discordName", function (
     err,
     account
