@@ -13,6 +13,20 @@ module.exports = function(client, inmsg) {
   // console.log("Client:", client, "\n----------------------\n");
   // console.log("inmsg:", inmsg, "\n----------------------\n");
 
+  // Check if user has an account
+  //!!!-What if user has a name change, does it change ID? -!!!
+  db.findAccount(inmsg.author.id, result => {
+    console.log(result);
+    if (result !== null) {
+      console.log("\n\nAccountfound\n\n");
+      return;
+    } else {
+      db.addAccount({ discordName: inmsg.author.username, discordAcctID: inmsg.author.id});
+      console.log("New User Account Created");
+      return;
+    }
+  });
+
   switch (command) {
     case "help":
       inmsg.channel.send(helpString);
@@ -25,14 +39,6 @@ module.exports = function(client, inmsg) {
     case "mychar":
     case "stats":
       inmsg.channel.send("You called for char?");
-      break;
-    case "testadd":
-      db.addAccount({
-        discordName: "Test1",
-        discordAcctID: "abc",
-        accountID: 1
-      });
-      console.log("TestAdd Run");
       break;
     default:
   }
