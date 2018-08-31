@@ -31,30 +31,25 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 // });
 
 function addAccount(acctInfo) {
-  //Error Checking for acctInfo, returns promise
-  let acctCheck = checkNewAccount(acctInfo);
 
-  acctCheck.then(success => {
-    try {
-      let discordID = acctInfo.discordAcctID;
-      findAccount(discordID, function (err, result) {
-        if (result.length != 0) {
-          console.log("Result = ", result);
-        } else {
-          newAccount = new Accounts.model(acctInfo);
-          newAccount.save(function (err, res) {
-            if (err) return console.error(err);
-            console.log("Save completed");
-          });
-        }
+  return new Promise((resolve, reject) => {
+    checkNewAccount(acctInfo)
+      .then(() => {
+        let discordID = acctInfo.discordAcctID;
+        findAccount(discordID)
+          .then(results => {
+            if (results.length == 0) {
+              let newAccount = new Accounts.model(acctInfo);
+              newAccount.save(function (err, res) {
+                if (err) return console.error(err);
+                resolve("addAccount: Save completed");
+              });
+            } else {
+              console.log(results);
+              reject("addAccount: Account already exists");
+            }
+          })
       });
-    } catch (err) {
-      if (err.name == "ReferenceError") {
-        console.log("discordAcctID doesn't exist", err);
-      } else console.log(err);
-    }
-  }, reject => {
-    console.log(reject);
   });
 }
 
@@ -62,26 +57,40 @@ function checkNewAccount(acctInfo) {
   return new Promise((resolve, reject) => {
     if (acctInfo.discordAcctID !== undefined) {
       if (acctInfo.discordName !== undefined) {
-        resolve(true);
+        resolve("checkNewAccount:  ok params");
       } else {
-        reject("undefined discordName");
+        reject("checkNewAccount: undefined discordName");
       }
     } else {
-      reject("undefined discordAcctID");
+      reject("checkNewAccount: undefined discordAcctID");
     }
   })
 }
 
-function findAccount(acctID, callback) {
+function findAccountHelper(acctID, callback) {
   Accounts.model.find({
     discordAcctID: acctID
-  }, "discordName", function (
+  }, null, function (
     err,
     account
   ) {
     if (err) return console.log(err);
     callback(null, account);
   });
+}
+
+function findAccount(acctID) {
+  return new Promise((resolve, reject) => {
+    Accounts.model.find({
+      discordAcctID: acctID
+    }, null, function (
+      err,
+      account
+    ) {
+      if (err) reject(err);
+      resolve(account);
+    });
+  })
 }
 
 function deleteAccount(acctID) {}
@@ -92,7 +101,12 @@ module.exports = {
   deleteAccount
 };
 // addAccount({
-//   discordAcctID: "",
-//   discordName: ""
-// }) ;
+//     discordAcctID: "fff",
+//     discordName: "ffff"
+//   }).then(msg => {
+//     console.log(msg);
+//   })
+//   .catch(err => {
+//     console.log("ERR DETECTEED", err);
+//   });
 console.log("Mongoosedb Completed");
