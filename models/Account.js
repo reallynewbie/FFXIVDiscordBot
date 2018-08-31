@@ -8,7 +8,7 @@ var accountSchema = new Schema({
   discordName: String,
   discordAcctID: String,
   accountID: "",
-  updateffLogsTrigger: { type: Boolean, default: false }
+  collector: { type: Boolean, default: false }
 });
 
 // Compile model from schema
