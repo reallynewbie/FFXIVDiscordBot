@@ -5,7 +5,7 @@ char/me/stats - *Displays your current stats*`;
 
 let db = require("../mongoosedb.js");
 
-module.exports = function(client, inmsg) {
+module.exports = function (client, inmsg) {
   let args = parseMessage(inmsg);
   let command = args.shift().toLowerCase();
   console.log("Incoming Command:", command, "\n----------------------\n");
@@ -15,17 +15,43 @@ module.exports = function(client, inmsg) {
 
   // Check if user has an account
   //!!!-What if user has a name change, does it change ID? -!!!
-  db.findAccount(inmsg.author.id, result => {
-    console.log(result);
-    if (result !== null) {
-      console.log("\n\nAccountfound\n\n");
-      return;
-    } else {
-      db.addAccount({ discordName: inmsg.author.username, discordAcctID: inmsg.author.id});
-      console.log("New User Account Created");
-      return;
-    }
-  });
+  db.findAccount(inmsg.author.id)
+    .then(results => {
+      if (results.length == 1) {
+        //Found only one account
+        return results;
+      } else if (results.length == 0) {
+        //New Account, no other accounts here with that AcctID
+        return db.addAccount({
+            discordName: inmsg.author.username,
+            discordAcctID: inmsg.author.id
+          })
+          .then(() => {
+            return db.findAccount(inmsg.author.id)
+              .then(newacct => {
+                return newacct;
+              })
+              .catch(err => {
+                return err;
+              });
+          })
+          .catch(err => {
+            throw new Error(err);
+          })
+      } else {
+        throw new Error("more or less than one account found in findAccount");
+      }
+    }).then(confirmedAccount => {
+      console.log("IN THEREEEE", confirmedAccount);
+      if (confirmedAccount.collector == false) {
+        //No Collector Active, proceeed with normal parse of command
+      } else {
+        //Collector active, need to look at next string.
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
 
   switch (command) {
     case "help":
@@ -40,6 +66,8 @@ module.exports = function(client, inmsg) {
     case "stats":
       inmsg.channel.send("You called for char?");
       break;
+    case "createchar":
+      break
     default:
   }
 };
