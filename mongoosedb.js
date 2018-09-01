@@ -92,6 +92,22 @@ function findAccount(acctID) {
     });
   })
 }
+// Obsolete as I'm using awaitmessages to handle the situation, but can be used later.
+// function collectorSwitch(acctID) {
+//   return new Promise((resolve, reject) => {
+//     Accounts.model.findOneAndUpdate({discordAcctID : acctID}, )
+//     Accounts.model.findOne({
+//       discordAcctID: acctID
+//     }, null, function(err, res) {
+//       if (err) reject(err);
+//       res.collector = !res.collector;
+//       res.save((err, updated) => {
+//         if (err) reject(err);
+//         resolve(updated);
+//       })
+//     })
+//   })
+// }
 
 function deleteAccount(acctID) {}
 
