@@ -3,6 +3,9 @@ help - *Displays this message with available commands*
 updatefflogs - *Links your account with a new FFLogs Account*
 char/me/stats - *Displays your current stats*`;
 
+const fflogsString = `__**Link FFLogs Account**__
+*Copy and paste a link to your FFLogs page*`
+
 let db = require("../mongoosedb.js");
 
 module.exports = function (client, inmsg) {
@@ -31,9 +34,6 @@ module.exports = function (client, inmsg) {
               .then(newacct => {
                 return newacct;
               })
-              .catch(err => {
-                return err;
-              });
           })
           .catch(err => {
             throw new Error(err);
@@ -43,33 +43,48 @@ module.exports = function (client, inmsg) {
       }
     }).then(confirmedAccount => {
       console.log("IN THEREEEE", confirmedAccount);
-      if (confirmedAccount.collector == false) {
-        //No Collector Active, proceeed with normal parse of command
-      } else {
-        //Collector active, need to look at next string.
+      //No Collector Active, proceeed with normal parse of command
+      switch (command) {
+        case "help":
+          inmsg.channel.send(helpString);
+          break;
+        case "update":
+        case "updatefflogs":
+          updateFFLogs(inmsg);
+          break;
+        case "char":
+        case "mychar":
+        case "stats":
+          inmsg.channel.send("You called for char?");
+          break;
+        case "createchar":
+          //Display Text to guide user to paste in the fflogs link next.
+          inmsg.channel.send(fflogsString);
+          const filter = m => !m.author.bot;
+          inmsg.channel.awaitMessages(filter, { max: 1 })
+          .then(collected => {
+            let response = collected.first();
+            if (response.content.toLowerCase().startsWith("https://www.fflogs.com/character")) {
+              //Do stuff with the FFlogs Link
+              console.log(true);
+
+            } else {
+              //Invalid response, display error message
+              console.log(false);
+            }
+
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          break;
+        default:
+          break;
       }
     })
     .catch(err => {
       console.log(err);
     });
-
-  switch (command) {
-    case "help":
-      inmsg.channel.send(helpString);
-      break;
-    case "update":
-    case "updatefflogs":
-      updateFFLogs(inmsg);
-      break;
-    case "char":
-    case "mychar":
-    case "stats":
-      inmsg.channel.send("You called for char?");
-      break;
-    case "createchar":
-      break
-    default:
-  }
 };
 
 function updateFFLogs(message) {}
