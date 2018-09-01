@@ -67,18 +67,6 @@ function checkNewAccount(acctInfo) {
   })
 }
 
-function findAccountHelper(acctID, callback) {
-  Accounts.model.find({
-    discordAcctID: acctID
-  }, null, function (
-    err,
-    account
-  ) {
-    if (err) return console.log(err);
-    callback(null, account);
-  });
-}
-
 function findAccount(acctID) {
   return new Promise((resolve, reject) => {
     Accounts.model.find({
