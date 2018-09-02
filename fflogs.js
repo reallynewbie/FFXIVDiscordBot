@@ -1,17 +1,61 @@
 require("dotenv").config();
+const axios = require("axios");
+const ffURL = "https://www.fflogs.com/v1/parses/character/"
 
-import axios from "axios";
-
-//Need Master List of which servers are where to add NA/EU/JP/etc...
 //https://www.fflogs.com/v1/parses/character/Really%20Newbie/Diabolos/NA
+//https://www.fflogs.com/character/na/diabolos/really%20newbie
+//https://www.fflogs.com/character/eu/phoenix/chayo%20kyota
+//https://www.fflogs.com/character/jp/bahamut/beere%20hellrot
 
 
 async function getFFLogs(address) {
-  axios.create( {
-    baseURL: "https://www.fflogs.com/v1/parses/character/",
-    headers: {
-      api_key: process.env.FFLOGS_KEY
-    }
+  try {
+    let addrInfo = await getRegionServer(address);
+    console.log(addrInfo);
+    let fullURL = ffURL + addrInfo.charName + "/" + addrInfo.server + "/" + addrInfo.region
+    let ffJSON = await axios.get(fullURL, {
+        params: {
+          api_key: process.env.FFLOGS_KEY
+        }
+      })
+      .then(res => {        
+        return res.data;
+      })
+      .catch(err => {
+        throw new Error(err);
+      })
+    return ffJSON;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
 
+function getRegionServer(address) {
+  return new Promise((resolve, reject) => {
+    if (address.startsWith("https://www.fflogs.com/character/")) {
+      let strArray = address.substring(33).split("/"); //33 is the length of the above string
+      //Ex:  [ 'na', 'diabolos', 'really%20newbie' ]
+
+      if (strArray.length == 3) {
+        resolve({
+          region: strArray[0],
+          server: strArray[1],
+          charName: strArray[2]
+        })
+      } else {
+        //Failcase for strarray length 3.
+        reject("getRegionServer:  Not enough fields");
+
+      }
+    } else {
+      //fail case for not finding opening address.
+      reject("getRegionServer:  Unable to find https://www.fflogs.com/character/");
+    }
   })
+}
+// const testAddr = "https://www.fflogs.com/character/na/diabolos/miqo%20renna";
+// getFFLogs(testAddr);
+
+module.exports = {
+  getFFLogs
 }
