@@ -6,7 +6,8 @@ char/me/stats - *Displays your current stats*`;
 const fflogsString = `__**Link FFLogs Account**__
 *Copy and paste a link to your FFLogs page*`
 
-let db = require("../mongoosedb.js");
+const db = require("../mongoosedb.js");
+const charController = require("../controllers/charController.js");
 
 module.exports = function (client, inmsg) {
   let args = parseMessage(inmsg);
@@ -58,25 +59,30 @@ module.exports = function (client, inmsg) {
           inmsg.channel.send("You called for char?");
           break;
         case "createchar":
-          //Display Text to guide user to paste in the fflogs link next.
+
+          //CHECK IF ACCOUNT IS THERE ALREADY FIRST
+
+          //If account not there, display Text to guide user to paste in the fflogs link next.
           inmsg.channel.send(fflogsString);
           const filter = m => !m.author.bot;
-          inmsg.channel.awaitMessages(filter, { max: 1 })
-          .then(collected => {
-            let response = collected.first();
-            if (response.content.toLowerCase().startsWith("https://www.fflogs.com/character")) {
-              //Do stuff with the FFlogs Link
-              console.log(true);
+          inmsg.channel.awaitMessages(filter, {
+              max: 1
+            })
+            .then(collected => {
+              let response = collected.first();
+              if (response.content.toLowerCase().startsWith("https://www.fflogs.com/character")) {
+                //Do stuff with the FFlogs Link
+                console.log(true);
 
-            } else {
-              //Invalid response, display error message
-              console.log(false);
-            }
+              } else {
+                //Invalid response, display error message
+                console.log(false);
+              }
 
-          })
-          .catch(err => {
-            console.log(err);
-          })
+            })
+            .catch(err => {
+              console.log(err);
+            })
           break;
         default:
           break;
