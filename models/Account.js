@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-//const WoL = require("./Character");
 // Define schema
 var Schema = mongoose.Schema;
 

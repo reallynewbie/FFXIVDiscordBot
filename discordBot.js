@@ -5,6 +5,7 @@ const directMessage = require("./discord/discordDM");
 const client = new Discord.Client();
 
 require("dotenv").config();
+
 try {
   discordLogin();
 } catch (err) {
