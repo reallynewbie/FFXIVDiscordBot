@@ -2,18 +2,26 @@ const mongoose = require("mongoose");
 // Define schema
 var Schema = mongoose.Schema;
 
+
+//dateJoined is now in UTC Epoch time - let date = new Date(seconds) 
 let charSchema = new Schema({
     CharID: Number,
-    Jobs: Array, 
-    HP: Number,
-    MP: Number,
+    Jobs: Array,
     AccountID: String,
-    dateJoined: Date,
+    dateJoined: Number,
+    lastUpdate: Number,
     CharFName: String,
-    CharLName: String
+    CharLName: String,
+    fflogs: String
 });
 
-charSchema.virtual('fullName').get()
+//Custom Functions
+//Need Error Checking and confirmation that this works.
+charSchema.methods.addJob = function (newJob) {
+    this.model.Jobs.push(newJob);
+    this.save();
+};
+
 
 var Character = mongoose.model("Character", charSchema);
 
