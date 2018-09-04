@@ -5,13 +5,13 @@ var Schema = mongoose.Schema;
 
 //dateJoined is now in UTC Epoch time - let date = new Date(seconds) 
 let charSchema = new Schema({
-    CharID: Number,
-    Jobs: Array,
-    AccountID: String,
+    charID: Number,
+    jobs: Array,
+    discordID: String,
     dateJoined: Number,
     lastUpdate: Number,
-    CharFName: String,
-    CharLName: String,
+    charFName: String,
+    charLName: String,
     fflogs: String
 });
 
@@ -25,4 +25,7 @@ charSchema.methods.addJob = function (newJob) {
 
 var Character = mongoose.model("Character", charSchema);
 
-module.exports = Character;
+module.exports = {
+    schema: charSchema,
+    model: Character
+};
