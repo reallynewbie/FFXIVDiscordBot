@@ -18,15 +18,18 @@ async function getFFLogs(address) {
           api_key: process.env.FFLOGS_KEY
         }
       })
-      .then(res => {        
-        return res.data;
+      .then(res => {
+        return {
+          parses: res.data,
+          charName: addrInfo.charName.split("%20")
+        };
       })
       .catch(err => {
-        throw new Error(err);
+        throw (err.response.data.status);
       })
     return ffJSON;
   } catch (err) {
-    throw new Error(err);
+    throw (err);
   }
 }
 
@@ -53,8 +56,8 @@ function getRegionServer(address) {
     }
   })
 }
-// const testAddr = "https://www.fflogs.com/character/na/diabolos/miqo%20renna";
-// getFFLogs(testAddr);
+// const testAddr = "https://www.fflogs.com/character/na/diabolos/really%20newbie";
+// console.log(getFFLogs(testAddr));
 
 module.exports = {
   getFFLogs
