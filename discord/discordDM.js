@@ -71,9 +71,20 @@ module.exports = function (client, inmsg) {
             .then(collected => {
               let response = collected.first();
               if (response.content.toLowerCase().startsWith("https://www.fflogs.com/character")) {
-                //Do stuff with the FFlogs Link
-                console.log(true);
+                if (response.content.toLowerCase().startsWith("https://www.fflogs.com/character/id")) {
+                  //Scrape the webpage to get char name and server + region.
+                  console.error("Using ID, not yet supported", response)
+                  throw new Error("Using ID, not yet supported");
+                } else {
 
+                  //Do stuff with the FFlogs Link
+                  console.log("filtered", inmsg.author.id, response.content);
+                  try {
+                    charController.newCharacter(inmsg.author.id, response.content);
+                  } catch (err) {
+                    console.error(err);
+                  }
+                }
               } else {
                 //Invalid response, display error message
                 console.log(false);
@@ -81,7 +92,7 @@ module.exports = function (client, inmsg) {
 
             })
             .catch(err => {
-              console.log(err);
+              throw (err);
             })
           break;
         default:
@@ -89,7 +100,7 @@ module.exports = function (client, inmsg) {
       }
     })
     .catch(err => {
-      console.log(err);
+      throw (err);
     });
 };
 
