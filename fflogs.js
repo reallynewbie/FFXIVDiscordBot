@@ -11,7 +11,6 @@ const ffURL = "https://www.fflogs.com/v1/parses/character/"
 async function getFFLogs(address) {
   try {
     let addrInfo = await getRegionServer(address);
-    console.log(addrInfo);
     let fullURL = ffURL + addrInfo.charName + "/" + addrInfo.server + "/" + addrInfo.region
     let ffJSON = await axios.get(fullURL, {
         params: {
@@ -25,7 +24,7 @@ async function getFFLogs(address) {
         };
       })
       .catch(err => {
-        throw (err.response.data.status);
+        throw (err.response.data);
       })
     return ffJSON;
   } catch (err) {
