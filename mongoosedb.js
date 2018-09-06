@@ -116,7 +116,7 @@ function deleteAccount(acctID) {}
 //   fflogs: String
 // });
 
-async function addNewCharacter(inDiscordID, jobArray, nameArray, inFFlogs) {
+function addNewCharacter(inDiscordID, jobArray, nameArray, inFFlogs) {
   return new Promise((resolve, reject) => {
     //Need a check to see if a discordID is already linked.(Will need to support people with alts)
     let curDate = Date.now();
@@ -136,12 +136,24 @@ async function addNewCharacter(inDiscordID, jobArray, nameArray, inFFlogs) {
   })
 }
 
+async function findCharacter(id) {
+  return new Promise((resolve, reject) => {
+    Characters.model.find({
+      discordID: id
+    }, function (err, res) {
+      if (err) reject(err);
+      resolve(res);
+    })
+  })
+}
+
 
 module.exports = {
   addAccount,
   findAccount,
   deleteAccount,
-  addNewCharacter
+  addNewCharacter,
+  findCharacter
 };
 // addAccount({
 //     discordAcctID: "fff",

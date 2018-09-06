@@ -9,6 +9,19 @@ Post for updating/creating a char using db
 
 Get for last updated time
 */
+async function findChar(discordID) {
+  try {
+    let results = await db.findCharacter(discordID);
+    if (results.length > 1) {
+      throw new Error("More than one char associated with this discordID", discordID);
+    } else {
+      return results;
+    }
+    
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 async function newCharacter(discordID, addr) {
   try {
@@ -33,18 +46,16 @@ async function newCharacter(discordID, addr) {
     jobArray = jobArray.sort((a, b) => {
       return a.job > b.job
     });
-
     return await db.addNewCharacter(discordID, jobArray, nameArray, addr);
   } catch (err) {
-    console.log("newCharacter: ", err);
+    console.error("newCharacter: ", err);
   }
 }
 
-const testAddr = "https://www.fflogs.com/character/na/diabolos/really%20newbie";
-newCharacter("TestDiscordID", testAddr);
-
-
+// const testAddr = "https://www.fflogs.com/character/na/diabolos/really%20newbie";
+// newCharacter("TestDiscordID", testAddr);
 
 module.exports = {
-  newCharacter
+  newCharacter,
+  findChar
 }
