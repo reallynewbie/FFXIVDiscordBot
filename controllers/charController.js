@@ -52,6 +52,26 @@ async function newCharacter(discordID, addr) {
   }
 }
 
+async function updateFFLogs(charID) {
+  try {
+    let charInfo = await findChar(charID);
+    let newData = await ffAPI.getFFLogs(charInfo);
+    let parses = newData.parses;
+    let jobArray = newData.jobs;
+    parses.forEach(function(parse) {
+      if (parse.time > charInfo.lastUpdate) {
+        //maynot be correct syntax for parse.time
+        let foundJob = jobArray.find(element => {
+          element.job.toString() == parse.spec.toString();
+        })
+      }
+    })
+
+  } catch (err) {
+    throw (err);
+  }
+}
+
 // const testAddr = "https://www.fflogs.com/character/na/diabolos/really%20newbie";
 // newCharacter("TestDiscordID", testAddr);
 
