@@ -125,8 +125,8 @@ function addNewCharacter(inDiscordID, jobArray, nameArray, inFFlogs) {
       discordID: inDiscordID,
       dateJoined: curDate,
       lastUpdated: curDate,
-      charFName: nameArray[0],
-      charLName: nameArray[1],
+      charFName: nameArray[0].charAt(0).toUpperCase() + nameArray[0].substr(1),
+      charLName: nameArray[1].charAt(0).toUpperCase() + nameArray[1].substr(1),
       fflogs: inFFlogs
     });
     newCharacter.save((err, res) => {
