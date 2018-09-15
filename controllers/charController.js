@@ -14,10 +14,11 @@ async function findChar(discordID) {
     let results = await db.findCharacter(discordID);
     if (results.length > 1) {
       throw new Error("More than one char associated with this discordID", discordID);
+    } else if (results.length == 0) {
+      throw new Error("No Results Found");
     } else {
-      return results;
+      return results[0];
     }
-    
   } catch (err) {
     console.error(err);
   }
@@ -74,6 +75,7 @@ async function updateFFLogs(charID) {
 
 // const testAddr = "https://www.fflogs.com/character/na/diabolos/really%20newbie";
 // newCharacter("TestDiscordID", testAddr);
+
 
 module.exports = {
   newCharacter,
