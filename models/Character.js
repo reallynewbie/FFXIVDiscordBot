@@ -9,7 +9,7 @@ let charSchema = new Schema({
     jobs: Array,
     discordID: String,
     dateJoined: Number,
-    lastUpdate: Number,
+    lastUpdated: Number,
     charFName: String,
     charLName: String,
     fflogs: String
