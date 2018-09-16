@@ -1,6 +1,9 @@
 const helpString = `__**Available Commands:**__ 
 help - *Displays this message with available commands*
-updatefflogs - *Links your account with a new FFLogs Account*
+createchar - *Links your account with a new FFLogs Account*
+deleteaccount - *Deletes your account with FFLogs Leaderboard*
+changefflogs - *Unlinks your FFLogs account from this bot and links it with another account*
+update - *Updates your jobs and levels with current information*
 char/me/stats - *Displays your current stats*`;
 
 const fflogsString = `__**Link FFLogs Account**__
@@ -60,13 +63,19 @@ module.exports = function (client, inmsg) {
           inmsg.channel.send(helpString);
           break;
         case "update":
-        case "updatefflogs":
+        //Check if char exists or not.
+          break;
+        case "changefflogs":
           inmsg.channel.send(fflogsUpdateStr);
           inmsg.channel.awaitMessages(filter, {
               max: 1
             })
             .then(collected => {
-              checkFFURL(collected.first());
+              if (checkFFURL(collected.first())) { // Checks if fflogs url is correct
+
+              } else {
+                //Failed the url check
+              }
             })
           updateFFLogs(inmsg);
           break;
@@ -79,7 +88,7 @@ module.exports = function (client, inmsg) {
           break;
         case "createchar":
 
-          //CHECK IF ACCOUNT IS THERE ALREADY FIRST
+          //**CHECK IF ACCOUNT IS THERE ALREADY FIRST**
 
           //If account not there, display Text to guide user to paste in the fflogs link next.
           inmsg.channel.send(fflogsString);
@@ -96,7 +105,7 @@ module.exports = function (client, inmsg) {
                 } else {
 
                   //Do stuff with the FFlogs Link
-                  console.log("filtered", inmsg.author.id, response.content);
+                  //console.log("filtered", inmsg.author.id, response.content);
                   try {
                     charController.newCharacter(inmsg.author.id, response.content);
                   } catch (err) {
@@ -147,8 +156,7 @@ function checkFFURL(url) {
       //Scrape the webpage to get char name and server + region. In the future
       console.error("Using ID, not yet supported", response)
       throw new Error("Using ID, not yet supported");
-    }
-    else {
+    } else {
       return true;
     }
   }
