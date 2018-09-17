@@ -147,6 +147,39 @@ async function findCharacter(id) {
   })
 }
 
+async function addEXP(discID, jobArray) {
+  return new Promise((resolve, reject) => {
+    Characters.model.findOne({
+      discordID: discID
+    }, async (err, res) => {
+      if (err) {
+        reject(Error(err));
+      } else {
+        let pulledJobArray = res.jobs;
+        await jobArray.forEach(element => {
+          let index = pulledJobArray.findIndex(e2 => {
+            return e2.job == element.job
+          })
+          if (index != -1) {
+            //console.log(pulledJobArray[index], element.exp)
+            pulledJobArray[index].exp += element.exp;
+          } else {
+            pulledJobArray.push({
+              job: element.job,
+              exp: element.exp
+            })
+          }
+        });
+        //console.log(pulledJobArray);
+        res.jobs = []; // overwrite jobs with the new jobarray
+        res.jobs = pulledJobArray;
+
+        resolve(res.save());
+      }
+    })
+  })
+}
+
 
 module.exports = {
   addAccount,
