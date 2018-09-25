@@ -186,7 +186,8 @@ module.exports = {
   findAccount,
   deleteAccount,
   addNewCharacter,
-  findCharacter
+  findCharacter,
+  addEXP
 };
 // addAccount({
 //     discordAcctID: "fff",
