@@ -63,7 +63,15 @@ module.exports = function (client, inmsg) {
           inmsg.channel.send(helpString);
           break;
         case "update":
-        //Check if char exists or not.
+          //Check if char exists or not.
+          let charExists = await charController.findChar(inmsg.author.id);
+          if (charExists) {
+            try {
+              charController.updateFFLogs(inmsg.author.id);
+            } catch (err) {
+              throw Error("discordDM Update: ", err);
+            }
+          }
           break;
         case "changefflogs":
           inmsg.channel.send(fflogsUpdateStr);
@@ -165,21 +173,3 @@ function checkFFURL(url) {
 function parseMessage(msg) {
   return msg.content.trim().split(/ +/g);
 }
-
-/* 
-    Available commands:
-    help
-    update
-        updatefflogs
-
-    char/mychar/stats
-    menu
-    deleteaccount(ask for confirmation)
-
-
-    --To be done--
-    use
-    changejob
-
-
-*/
