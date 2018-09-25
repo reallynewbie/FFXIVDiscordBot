@@ -20,7 +20,7 @@ async function findChar(discordID) {
       return results[0];
     }
   } catch (err) {
-    console.error(err);
+    console.error("findChar: ", err);
   }
 }
 
@@ -53,23 +53,25 @@ async function newCharacter(discordID, addr) {
   }
 }
 
-async function updateFFLogs(charID) {
+async function updateFFLogs(discID) { 
   try {
-    let charInfo = await findChar(charID);
-    let newData = await ffAPI.getFFLogs(charInfo);
+    let charInfo = await findChar(discID); //If wanting to expand to multiple chars per DiscordID, I need to change this.
+    let newData = await ffAPI.getFFLogs(charInfo.fflogs);
     let parses = newData.parses;
-    let jobArray = newData.jobs;
-    parses.forEach(function(parse) {
-      if (parse.time > charInfo.lastUpdate) {
-        //maynot be correct syntax for parse.time
-        let foundJob = jobArray.find(element => {
-          element.job.toString() == parse.spec.toString();
+    let jobArray = new Array();
+    await parses.forEach(function (parse) {
+      if (parse.startTime > charInfo.lastUpdated) {
+        jobArray.push({
+          job: parse.spec,
+          exp: 100 + parse.percentile
         })
       }
     })
+    let result = await db.addEXP(discID, jobArray);
+    console.log(result);
 
   } catch (err) {
-    throw (err);
+    throw Error("updateFFLogs: ", err);
   }
 }
 
@@ -79,5 +81,6 @@ async function updateFFLogs(charID) {
 
 module.exports = {
   newCharacter,
-  findChar
+  findChar,
+  updateFFLogs
 }
