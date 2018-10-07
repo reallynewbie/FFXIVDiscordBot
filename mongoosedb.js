@@ -102,7 +102,20 @@ function findAccount(acctID) {
 //   })
 // }
 
-function deleteAccount(acctID) {}
+function deleteAccount(acctID) {
+  return new Promise((resolve, reject) => {
+    Accounts.model.deleteMany({
+      discordAcctID: acctID
+    }, function (err) {
+      if (err)
+        reject(err);
+      else
+        resolve("Account Deleted Successfully")
+    })
+  })
+}
+
+function deleteChara
 
 //dateJoined is now in UTC Epoch time - let date = new Date(seconds) 
 // let charSchema = new Schema({
