@@ -16,11 +16,15 @@ const fflogsUpdateStr = `__**Update FFLogs Account**__
 ex:  https://www.fflogs.com/character/na/diabolos/really%20newbie
 Note:  Linking via ID number page isn't supported yet (https://www.fflogs.com/character/id/207082)`
 
+const deleteAccountStr = `__**Delete FFXIV Discord Bot Character**__
+*Are you sure you want to delete your account?*
+Type 'delete account' without the quotes to confirm this.`
 
 const Discord = require("discord.js");
 const db = require("../mongoosedb.js");
 const charController = require("../controllers/charController.js");
 const filter = m => !m.author.bot;
+
 
 module.exports = function (client, inmsg) {
   let args = parseMessage(inmsg);
@@ -131,7 +135,18 @@ module.exports = function (client, inmsg) {
             })
           break;
         case "deletechar":
-
+            //Once multi chars are supported, need to refactor to include options to check
+            inmsg.channel.send(deleteAccountStr);
+            inmsg.channel.awaitMessages(filter, {
+              max: 1
+            }).then(collected => {
+              let message = collected.first();
+              if (message.toLowerCase() == "delete account") {
+                
+              } else {
+                inmsg.channel.send("Delete Character command cancelled.");
+              }
+            })
           break;
         default:
           break;
