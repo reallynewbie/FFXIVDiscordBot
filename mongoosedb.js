@@ -110,7 +110,15 @@ function deleteAccount(acctID) {
       if (err)
         reject(err);
       else
-        resolve("Account Deleted Successfully");
+        Characters.model.deleteMany({
+          discordID: acctID
+        }, function (err) {
+          if (err)
+            reject("Account Deleted, however characters failed:", err);
+          else {
+            resolve("Account Deleted Successfully");
+          }
+        })
     })
   })
 }
