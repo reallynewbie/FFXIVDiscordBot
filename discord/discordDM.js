@@ -2,7 +2,7 @@ const helpString = `__**Available Commands:**__
 help - *Displays this message with available commands*
 createchar - *Links your account with a new FFLogs Account*
 deleteaccount - *Deletes your account with FFLogs Leaderboard*
-changefflogs - *Unlinks your FFLogs account from this bot and links it with another account*
+changefflogs - Not implemented yet - *Unlinks your FFLogs account from this bot and links it with another account*
 update - *Updates your jobs and levels with current information*
 char/me/stats - *Displays your current stats*`;
 
@@ -19,6 +19,12 @@ Note:  Linking via ID number page isn't supported yet (https://www.fflogs.com/ch
 const deleteAccountStr = `__**Delete FFXIV Discord Bot Character**__
 *Are you sure you want to delete your account?*
 Type 'delete account' without the quotes to confirm this.`
+
+const fflogsLinkWrong = `__**Invalid FFLogs Account**__
+Unable to find the FFLogs account posted.  Please double check the link.
+It should be in the following format:
+ex:  https://www.fflogs.com/character/na/diabolos/really%20newbie
+`
 
 const Discord = require("discord.js");
 const db = require("../mongoosedb.js");
@@ -84,12 +90,13 @@ module.exports = function (client, inmsg) {
             })
             .then(collected => {
               if (checkFFURL(collected.first())) { // Checks if fflogs url is correct
-
+                //changefflogs function
               } else {
                 //Failed the url check
+                inmsg.channel.send(fflogsLinkWrong);
+                console.log(collected.first(), "Incorrect link: ", collected.first())
               }
             })
-          updateFFLogs(inmsg);
           break;
         case "char":
         case "mychar":
@@ -157,7 +164,10 @@ module.exports = function (client, inmsg) {
     });
 };
 
-function updateFFLogs(message) {}
+function updateFFLogs(acctID) {
+  //charcontroller.updatefflogs is not able to support multi-chars.
+  charController.updateFFLogs(acctID);
+}
 
 function embeddedStatsCreator(fName, lName, jobArray) { //This is bad, don't send an entire object.  Send parameters separated.
   if (jobArray.length == 0) {
