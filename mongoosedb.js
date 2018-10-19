@@ -110,12 +110,21 @@ function deleteAccount(acctID) {
       if (err)
         reject(err);
       else
-        resolve("Account Deleted Successfully")
+        resolve("Account Deleted Successfully");
     })
   })
 }
 
-function deleteChara
+function deleteCharacter(id) {
+  return new Promise((resolve, reject) => {
+    Characters.model.deleteOne({
+      charID: id
+    }, function (err) {
+      if (err) reject(err);
+      else resolve("Character deleted:  ", id)
+    })
+  })
+}
 
 //dateJoined is now in UTC Epoch time - let date = new Date(seconds) 
 // let charSchema = new Schema({
