@@ -27,6 +27,7 @@ function discordLogin() {
         case "text":
           console.log("Enter server text");
           //serverMessage(client, message);
+          
           break;
         default:
           console.log("messageType = " + messageType);
@@ -58,4 +59,34 @@ function discordGetChannels(myClient) {
 }
 function discordGetServer(myClient) {
   console.log(myClient.guilds);
+}
+
+function discordinit() {
+  message.guild.createChannel("FFXIVBot", "category", [{
+    id: message.guild.id,
+    deny: ['MANAGE_MESSAGES'],
+    allow: ['SEND_MESSAGES']
+  }])
+  .then((category) => {
+    console.log(category);
+    message.guild.createChannel("Leaderboard", "text", [{
+      id: message.guild.id,
+      deny: ['MANAGE_MESSAGES'],
+      allow: ['SEND_MESSAGES']
+    }])
+    .then((res) => {
+      res.setParent(category, "Set to Category Child");
+    })
+    .catch(console.error);
+    message.guild.createChannel("New-Account", "text", [{
+      id: message.guild.id,
+      deny: ['MANAGE_MESSAGES'],
+      allow: ['SEND_MESSAGES']
+    }])
+    .then((res) => {
+      res.setParent(category);
+    })
+    .catch(console.error);
+  })
+  .catch(console.error);
 }
