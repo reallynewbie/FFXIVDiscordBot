@@ -9,10 +9,10 @@ A Discord Bot built using [DiscordJS](https://discord.js.org) which pulls charac
 * DiscordJS
 
 ### Setup Instructions:
-* ```
+```
 git clone https://github.com/reallynewbie/FFXIVDiscordBot.git
 npm install
-* ```
+```
 * Populate .env file in the root of directory with the following keys:
   * DISCORD_KEY=
   * BOT_NAME=
